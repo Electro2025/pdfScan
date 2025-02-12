@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCANNER PDF ELECTROTOTAL</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #6dd5fa, #2980b9);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+    .card {
+      border: none;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    }
+    .card h2 {
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #2980b9;
+    }
+    .card p {
+      color: #555;
+    }
+    .form-label {
+      font-weight: 500;
+    }
+    .custom-input {
+      border-radius: 25px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      transition: border-color 0.3s;
+    }
+    .custom-input:focus {
+      border-color: #2980b9;
+      box-shadow: none;
+    }
+    .btn-primary {
+      background: #2980b9;
+      border: none;
+      border-radius: 25px;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      transition: background 0.3s;
+    }
+    .btn-primary:hover {
+      background: #1c5980;
+    }
+    /* Estilos para el control segmentado del modo de color */
+    .segmented-control {
+      display: flex;
+      border: 1px solid #ccc;
+      border-radius: 25px;
+      overflow: hidden;
+    }
+    .segmented-control input[type="radio"] {
+      display: none;
+    }
+    .segmented-control label.segment {
+      flex: 1;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+      background: #f0f0f0;
+      transition: background 0.3s;
+      margin: 0;
+    }
+    .segmented-control label.segment.segment-color {
+      background: #eaf8ff;
+    }
+    .segmented-control label.segment.segment-grayscale {
+      background: #eaf8ff;
+    }
+    .segmented-control input[type="radio"]:checked + label.segment-color {
+        background: linear-gradient(to right, #00aaff, #5a6bbf, #8a7abf);
+        color: white;
+    }
+    .segmented-control input[type="radio"]:checked + label.segment-grayscale {
+        background:rgb(0, 0, 0);
+        color: white;
+    }
+    .custom-range {
+      width: 100%;
+    }
+      
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card p-4">
+          <h2 class="text-center">SCANNER PDF</h2>
+          <p class="text-center mb-4">Escáner digital de PDF de Electrototal Security</p>
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="id_file" class="form-label">Selecciona tu PDF</label>
+              {{ form.file }}
+            </div>
+            <!-- Modo de color como control segmentado -->
+            <div class="mb-3">
+              <label class="form-label">Modo de color</label>
+              <div class="segmented-control">
+                <input type="radio" id="color_mode_color" name="color_mode" value="color" checked>
+                <label for="color_mode_color" class="segment segment-color">Color</label>
+                <input type="radio" id="color_mode_grayscale" name="color_mode" value="grayscale">
+                <label for="color_mode_grayscale" class="segment segment-grayscale">Blanco y Negro</label>
+              </div>
+            </div>
+            <!-- Slider para DPI -->
+            <div class="mb-3">
+              <label for="id_dpi" class="form-label">Resolución (DPI): <span id="dpiValue">300</span></label>
+              {{ form.dpi }}
+            </div>
+            <div class="mb-3 form-check">
+              {{ form.denoise }}
+              <label class="form-check-label" for="id_denoise">Reducir ruido</label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Procesar PDF</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const dpiInput = document.getElementById('id_dpi');
+      const dpiValue = document.getElementById('dpiValue');
+      dpiInput.addEventListener('input', function() {
+        dpiValue.textContent = dpiInput.value;
+      });
+    });    
+  </script>
+</body>
+</html>
